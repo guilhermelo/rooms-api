@@ -1,0 +1,28 @@
+version: '3'
+services:
+    banco_dados:
+      image: mysql
+      container_name: banco_dados
+      ports:
+          - "12345:12345"
+      networks:
+        - minha-rede
+      environment: 
+        - MYSQL_USER=root
+        - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+        - MYSQL_DATABASE=rooms
+    rooms_api:
+        build: 
+            dockerfile: ./docker/dockerfile-roomsapi
+            context: .
+        container_name: roomsapi
+        ports:
+          - "8080:8080"
+        networks:
+          - minha-rede
+        depends_on:
+          - "banco_dados"
+networks:
+  minha-rede:
+    driver: bridge
+    
