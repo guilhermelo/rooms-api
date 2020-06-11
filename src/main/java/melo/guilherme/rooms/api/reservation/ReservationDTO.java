@@ -1,31 +1,30 @@
-package melo.guilherme.rooms.api.reserve;
+package melo.guilherme.rooms.api.reservation;
 
 import java.util.Objects;
 
 import melo.guilherme.rooms.api.room.RoomDTO;
 import melo.guilherme.rooms.api.user.UserDTO;
-import melo.guilherme.rooms.api.util.date.DateUtil;
 
-public class ReserveDTO {
+public class ReservationDTO {
 	private String id;
 	private RoomDTO room;
 	private UserDTO user;
 	private String initDate;
 	private String finalDate;
 
-	public ReserveDTO() {
+	public ReservationDTO() {
 		super();
 	}
 
-	public ReserveDTO(Reserve reserve) {
+	public ReservationDTO(Reservation reserve) {
 
 		if (Objects.isNull(reserve)) {
 			return;
 		}
 
 		this.id = reserve.getId();
-		this.initDate = DateUtil.parseDatetime(reserve.getInitDate());
-		this.finalDate = DateUtil.parseDatetime(reserve.getFinalDate());
+		this.initDate = reserve.getInitDate().toString();
+		this.finalDate = reserve.getFinalDate().toString();
 	}
 
 	public String getId() {

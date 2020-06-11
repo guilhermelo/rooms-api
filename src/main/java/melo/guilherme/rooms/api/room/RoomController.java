@@ -3,8 +3,8 @@ package melo.guilherme.rooms.api.room;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,20 +18,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 import melo.guilherme.rooms.api.generic.CollectionResponseDTO;
 
 
-// @CrossOrigin
+@CrossOrigin
 @RestController
 @RequestMapping("/v1/rooms")
 public class RoomController {
 
-	@Autowired
-	private RoomService service;
+	private final RoomService service;
+	private final RoomAssemblerDTO assembler;
 	
-	@Autowired
-	private RoomAssemblerDTO assembler;
+	public RoomController(RoomService service, RoomAssemblerDTO assembler) {
+		this.service = service;
+		this.assembler = assembler;
+	}
 	
 	@GetMapping
 	public ResponseEntity<CollectionResponseDTO<RoomDTO>> getAll() {
-		List<RoomDTO> rooms = assembler.assembleManyDTOs(service.getRooms());
+		List<RoomDTO> rooms = assembler.assembleManyDTOs(service.getAll());
 		
 		CollectionResponseDTO<RoomDTO> collection = new CollectionResponseDTO<RoomDTO>(rooms, rooms.size(), 0);		
 		

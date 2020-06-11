@@ -1,4 +1,4 @@
-package melo.guilherme.rooms.api.reserve;
+package melo.guilherme.rooms.api.reservation;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ import melo.guilherme.rooms.api.user.User;
 
 @Entity
 @Table(name = "reserves")
-public class Reserve {
+public class Reservation {
 
 	@Id
 	@Column
@@ -27,21 +27,21 @@ public class Reserve {
 	private Room room;
 
 	@OneToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column
+	@Column(name = "init_date", nullable = false)
 	private LocalDateTime initDate;
 
-	@Column
+	@Column(name = "final_date", nullable = false)
 	private LocalDateTime finalDate;
 
 	@Deprecated
-	public Reserve() {
+	public Reservation() {
 		super();
 	}
 
-	public Reserve(ReserveBuilder builder) {
+	public Reservation(ReservationBuilder builder) {
 		this.id = builder.id;
 		this.room = builder.room;
 		this.user = builder.user;
@@ -49,40 +49,40 @@ public class Reserve {
 		this.finalDate = builder.finalDate;
 	}
 
-	public static class ReserveBuilder {
+	public static class ReservationBuilder {
 		private String id;
 		private Room room;
 		private User user;
 		private LocalDateTime initDate;
 		private LocalDateTime finalDate;
 
-		public ReserveBuilder id(String id) {
+		public ReservationBuilder id(String id) {
 			this.id = id;
 			return this;
 		}
 
-		public ReserveBuilder room(Room room) {
+		public ReservationBuilder room(Room room) {
 			this.room = room;
 			return this;
 		}
 		
-		public ReserveBuilder user(User user) {
+		public ReservationBuilder user(User user) {
 			this.user = user;
 			return this;
 		}
 		
-		public ReserveBuilder initDate(LocalDateTime initDate) {
+		public ReservationBuilder initDate(LocalDateTime initDate) {
 			this.initDate = initDate;
 			return this;
 		}
 		
-		public ReserveBuilder finalDate(LocalDateTime finalDate) {
+		public ReservationBuilder finalDate(LocalDateTime finalDate) {
 			this.finalDate = finalDate;
 			return this;
 		}
 		
-		public Reserve build() {
-			return new Reserve(this);
+		public Reservation build() {
+			return new Reservation(this);
 		}
 		
 	}

@@ -1,4 +1,4 @@
-package melo.guilherme.rooms.api.reserve;
+package melo.guilherme.rooms.api.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/reserve")
-public class ReserveController {
+public class ReservationController {
 	
 	@Autowired
-	private ReserveService service;
+	private ReservaionService service;
 	
 	@Autowired
-	private ReserveAssemblerDTO assembler;
+	private ReservationAssemblerDTO assembler;
 	
 	
 	@PostMapping
-	public ResponseEntity<?> reserveRoom(@RequestBody ReserveDTO dto) {
+	public ResponseEntity<?> reserveRoom(@RequestBody ReservationDTO dto) {
 		service.reserveRoom(assembler.assembleEntity(dto));
 		
 		return ResponseEntity.ok().build();

@@ -1,4 +1,4 @@
-package melo.guilherme.rooms.api.reserve;
+package melo.guilherme.rooms.api.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import melo.guilherme.rooms.api.user.UserAssemblerDTO;
 import melo.guilherme.rooms.api.util.date.DateUtil;
 
 @Component
-public class ReserveAssemblerDTO extends AssemblerDTO<Reserve, ReserveDTO>{
+public class ReservationAssemblerDTO implements AssemblerDTO<Reservation, ReservationDTO>{
 
 	@Autowired
 	private UserAssemblerDTO userAssembler;
@@ -17,10 +17,13 @@ public class ReserveAssemblerDTO extends AssemblerDTO<Reserve, ReserveDTO>{
 	@Autowired
 	private RoomAssemblerDTO roomAssembler;
 	
+	@Autowired 
+	private DateUtil dateUtil;
+	
 	@Override
-	public ReserveDTO assembleDTO(Reserve entity) {
+	public ReservationDTO assembleDTO(Reservation entity) {
 		
-		ReserveDTO dto = new ReserveDTO(entity);
+		ReservationDTO dto = new ReservationDTO(entity);
 		
 		dto.setUser(userAssembler.assembleDTO(entity.getUser()));
 		
@@ -30,10 +33,10 @@ public class ReserveAssemblerDTO extends AssemblerDTO<Reserve, ReserveDTO>{
 	}
 
 	@Override
-	public Reserve assembleEntity(ReserveDTO dto) {
-		return new Reserve.ReserveBuilder().id(dto.getId())
-										   .initDate(DateUtil.parseDatetime(dto.getInitDate()))
-										   .finalDate(DateUtil.parseDatetime(dto.getFinalDate()))
+	public Reservation assembleEntity(ReservationDTO dto) {
+		return new Reservation.ReservationBuilder().id(dto.getId())
+										   .initDate(dateUtil.parseDatetime(dto.getInitDate()))
+										   .finalDate(dateUtil.parseDatetime(dto.getFinalDate()))
 										   .room(roomAssembler.assembleEntity(dto.getRoom()))
 										   .user(userAssembler.assembleEntity(dto.getUser()))
 										   .build();

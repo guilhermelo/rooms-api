@@ -12,14 +12,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import melo.guilherme.rooms.api.user.User;
-import melo.guilherme.rooms.api.user.IUserRepository;
+import melo.guilherme.rooms.api.user.UserRepository;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	
 	private TokenService tokenService;
-	private IUserRepository userRepository;
+	private UserRepository userRepository;
 	
-	public JWTAuthenticationFilter(TokenService tokenService, IUserRepository userRepository) {
+	public JWTAuthenticationFilter(TokenService tokenService, UserRepository userRepository) {
 		this.tokenService = tokenService;
 		this.userRepository = userRepository;
 	}

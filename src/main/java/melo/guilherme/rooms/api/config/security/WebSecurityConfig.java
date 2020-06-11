@@ -12,8 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import melo.guilherme.rooms.api.user.IUserRepository;
+import melo.guilherme.rooms.api.user.UserRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private AuthenticationService service;
 	
 	@Autowired
-	private IUserRepository userRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private TokenService tokenService;
@@ -42,8 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http.cors().configurationSource(corsConfig())
+			.and()
+			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/users**").permitAll()
+			.antMatchers(HttpMethod.GET, "/users/exists/**").permitAll()
 			.antMatchers(HttpMethod.POST, "/users/authentication").permitAll()
 			.and()
 			.authorizeRequests()
@@ -56,5 +62,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.addFilterBefore(new JWTAuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 			
+	}
+	
+	private CorsConfigurationSource corsConfig() {
+		CorsConfiguration config = new CorsConfiguration();
+		
+		// "x-access-token"
+		config.addExposedHeader("x-access-token");
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config.applyPermitDefaultValues());
+		
+		return source;
 	}
 }

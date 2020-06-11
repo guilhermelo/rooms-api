@@ -7,6 +7,7 @@ public class UserDTO {
 	private String username;
 	private String password;
 	private String email;
+	private String name;
 	
 	public UserDTO() {
 		super();
@@ -15,8 +16,8 @@ public class UserDTO {
 	public UserDTO(User entity) {
 		this.id = entity.getId();
 		this.username = entity.getUsername();
-		this.password = entity.getPassword();
 		this.email = entity.getEmail();
+		this.name = entity.getName();
 	}
 
 	public String getId() {
@@ -38,7 +39,7 @@ public class UserDTO {
 	public String getPassword() {
 		return password;
 	}
-
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -49,6 +50,10 @@ public class UserDTO {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public UsernamePasswordAuthenticationToken transformAuthenticationToken() {

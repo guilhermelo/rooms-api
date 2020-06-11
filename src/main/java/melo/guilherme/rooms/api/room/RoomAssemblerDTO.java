@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import melo.guilherme.rooms.api.generic.AssemblerDTO;
 
 @Component
-public class RoomAssemblerDTO extends AssemblerDTO<Room, RoomDTO> {
+public class RoomAssemblerDTO implements AssemblerDTO<Room, RoomDTO> {
 
 	@Override
 	public RoomDTO assembleDTO(Room entity) {
@@ -15,6 +15,7 @@ public class RoomAssemblerDTO extends AssemblerDTO<Room, RoomDTO> {
 	@Override
 	public Room assembleEntity(RoomDTO dto) {
 		return new Room.RoomBuilder().id(dto.getId())
+									 .name(dto.getName())	
 									 .description(dto.getDescription())
 									 .amountPeople(dto.getAmountPeople())
 									 .build();

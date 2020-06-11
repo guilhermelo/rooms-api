@@ -9,13 +9,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import melo.guilherme.rooms.api.user.User;
-import melo.guilherme.rooms.api.user.IUserRepository;
+import melo.guilherme.rooms.api.user.UserRepository;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
 	
 	@Autowired
-	private IUserRepository repository;
+	private UserRepository repository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

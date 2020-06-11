@@ -11,9 +11,9 @@ public class RoomDTO {
 
 	public RoomDTO(Room room) {
 		this.id = room.getId();
-		this.description = room.getDescription();
 		this.name = room.getName();
 		this.description = room.getDescription();
+		this.amountPeople = room.getAmountPeople();
 	}
 
 	public String getId() {

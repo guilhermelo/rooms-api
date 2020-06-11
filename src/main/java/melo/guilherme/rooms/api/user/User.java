@@ -21,6 +21,9 @@ public class User implements UserDetails {
 	private String id;
 	
 	@Column
+	private String name;
+	
+	@Column
 	private String username;
 	
 	@Column
@@ -38,6 +41,7 @@ public class User implements UserDetails {
 		this.username = builder.username;
 		this.password = builder.password;
 		this.email = builder.email;
+		this.name = builder.name;
 	}
 	
 	
@@ -47,6 +51,7 @@ public class User implements UserDetails {
 		private String username;
 		private String password;
 		private String email;
+		private String name;
 		
 		public UserBuilder id(String id) {
 			this.id = id;
@@ -68,10 +73,14 @@ public class User implements UserDetails {
 			return this;
 		}
 		
+		public UserBuilder name(String name) {
+			this.name = name;
+			return this;
+		}
+		
 		public User build() {
 			return new User(this);
 		}
-		
 	}
 	
 	public String getId() {
@@ -84,6 +93,10 @@ public class User implements UserDetails {
 	
 	public String getEmail() {
 		return email;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	@Override
