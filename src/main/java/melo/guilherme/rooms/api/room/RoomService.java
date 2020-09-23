@@ -11,15 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import melo.guilherme.rooms.api.config.exception.BusinessException;
 import melo.guilherme.rooms.api.config.exception.Message;
 import melo.guilherme.rooms.api.config.exception.MessageType;
+import melo.guilherme.rooms.api.user.User;
+import melo.guilherme.rooms.api.user.UserRepository;
 import melo.guilherme.rooms.api.util.uuid.UUIDGenerator;
 
 @Service
 public class RoomService {
 
-	private final IRoomRepository repository;
+	private final RoomRepository repository;
+	private final UserRepository userRepository;
 
-	public RoomService(IRoomRepository repository) {
+	public RoomService(RoomRepository repository, UserRepository userRepository) {
 		this.repository = repository;
+		this.userRepository = userRepository;
 	}
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED, rollbackFor = { BusinessException.class, Exception.class })
@@ -30,6 +34,11 @@ public class RoomService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = { BusinessException.class })
 	public Room save(Room room) {
 		room.setId(UUIDGenerator.generate());
+		Optional<User> user = userRepository.findById(room.getUser().getId());
+		
+		User userOfRoom = user.orElseThrow(() -> BusinessException.of(Message.of("Room's user doesn't exist!", MessageType.VALIDATION)));
+		
+		room.setUser(userOfRoom);
 		Room savedRoom = repository.save(room);
 
 		return savedRoom;
@@ -39,7 +48,7 @@ public class RoomService {
 	public Room update(String id, Room room) {
 
 		if (Objects.isNull(id)) {
-			BusinessException.of(new Message("Identificator isn't exist", MessageType.VALIDATION));
+			throw BusinessException.of(Message.of("Identificator isn't exist", MessageType.VALIDATION));
 		}
 
 		room.setId(id);
@@ -53,18 +62,18 @@ public class RoomService {
 	public Room delete(String id) {
 
 		if (Objects.isNull(id)) {
-			BusinessException.of(new Message("Identificator isn't exist", MessageType.VALIDATION));
+			throw BusinessException.of(Message.of("Identificator isn't exist", MessageType.VALIDATION));
 		}
 
 		repository.deleteById(id);
 
-		return new Room.RoomBuilder().id(id).build();
+		return new Room.builder().id(id).build();
 	}
 
 	public Optional<Room> getById(String id) {
 		
 		if (Objects.isNull(id)) {
-			BusinessException.of(new Message("Identificator isn't exist", MessageType.VALIDATION));
+			throw BusinessException.of(Message.of("Identificator isn't exist", MessageType.VALIDATION));
 		}
 
 		return repository.findById(id);

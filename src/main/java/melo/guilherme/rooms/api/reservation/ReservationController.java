@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 	
 	@Autowired
-	private ReservaionService service;
+	private ReservationService service;
 	
 	@Autowired
 	private ReservationAssemblerDTO assembler;

@@ -27,7 +27,7 @@ public class DateUtilTest {
 		this.dateUtil.parseDatetime(date);
 	}
 	
-	@Test(expected = BusinessException.class)
+	@Test(expected = NullPointerException.class)
 	public void shouldThrowExceptionWhenDateIsNull() {
 		
 		String date = null;
