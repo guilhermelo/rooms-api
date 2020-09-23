@@ -4,10 +4,15 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import melo.guilherme.rooms.api.user.User;
 
 @Entity
 @Table(name = "rooms")
@@ -17,7 +22,7 @@ public class Room {
 	private String id;
 	
 	@NotBlank
-	@Column(name = "name", nullable = false, length = 15, unique = true)
+	@Column(name = "name", nullable = false, length = 20, unique = true)
 	private String name;
 	
 	@NotBlank
@@ -28,37 +33,43 @@ public class Room {
 	@Column(name = "amountPeople", nullable = false)
 	private Integer amountPeople;
 	
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User user;
+	
 	@Deprecated
 	public Room() {
 	}
 	
-	private Room(String id, String name, String description, Integer amountPeople) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.amountPeople = amountPeople;
+	private Room(builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.description = builder.description;
+		this.amountPeople = builder.amountPeople;
+		this.user = builder.user;
 	}
 	
 	
-	public static class RoomBuilder {
+	public static class builder {
 		private String id;
 		private String name;
 		private String description;
 		private Integer amountPeople;
+		private User user;
 		
-		public RoomBuilder id(String id) {
+		public builder id(String id) {
 			this.id = id;
 			return this;
 		}
 		
-		public RoomBuilder name(String name) {
+		public builder name(String name) {
 			Objects.requireNonNull(name, "Name is required");
 			
 			this.name = name;
 			return this;
 		}
 		
-		public RoomBuilder description(String description) {
+		public builder description(String description) {
 			
 			Objects.requireNonNull(description, "Description is required");
 			
@@ -70,15 +81,22 @@ public class Room {
 			return this;
 		}
 		
-		public RoomBuilder amountPeople(Integer amountPeople) {
+		public builder amountPeople(Integer amountPeople) {
 			Objects.requireNonNull(amountPeople, "Amount People is required");
 			
 			this.amountPeople = amountPeople;
 			return this;
 		}
 		
+		public builder user(User user) {
+			Objects.requireNonNull(user, "User can't be null");
+			
+			this.user = user;
+			return this;
+		}
+		
 		public Room build() {
-			return new Room(id, name, description, amountPeople);
+			return new Room(this);
 		}
 	}
 	
@@ -101,8 +119,12 @@ public class Room {
 	public int getAmountPeople() {
 		return amountPeople;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

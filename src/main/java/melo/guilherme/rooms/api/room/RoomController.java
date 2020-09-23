@@ -2,6 +2,7 @@ package melo.guilherme.rooms.api.room;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,6 +39,14 @@ public class RoomController {
 		CollectionResponseDTO<RoomDTO> collection = new CollectionResponseDTO<RoomDTO>(rooms, rooms.size(), 0);		
 		
 		return ResponseEntity.ok(collection);
+	}
+	
+	@GetMapping("/{roomId}")
+	public ResponseEntity<RoomDTO> getById(@PathVariable("roomId") String roomId) {
+		Optional<Room> room = service.getById(roomId);
+		RoomDTO dto = assembler.assembleDTO(room.orElseGet(null));	
+		
+		return ResponseEntity.ok(dto);
 	}
 	
 	@PostMapping

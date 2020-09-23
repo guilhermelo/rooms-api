@@ -7,7 +7,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import melo.guilherme.rooms.api.room.Room.RoomBuilder;
+import melo.guilherme.rooms.api.room.Room.builder;
+import melo.guilherme.rooms.api.user.User;
 import melo.guilherme.rooms.api.util.uuid.UUIDGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,10 +35,11 @@ public class RoomAssemblerDTOTest {
 	@Test
 	public void shouldTransformModelToDTO() {
 		
-		Room room = new RoomBuilder().id(UUIDGenerator.generate())
+		Room room = new builder().id(UUIDGenerator.generate())
 									 .name("Room 1")
 									 .description("Description")
 									 .amountPeople(10)
+									 .user(new User.builder().id(UUIDGenerator.generate()).build())
 									 .build();
 		
 		assembler.assembleDTO(room);

@@ -5,6 +5,7 @@ public class RoomDTO {
 	private String name;
 	private String description;
 	private Integer amountPeople;
+	private String userId;
 	
 	public RoomDTO() {
 	}
@@ -14,6 +15,7 @@ public class RoomDTO {
 		this.name = room.getName();
 		this.description = room.getDescription();
 		this.amountPeople = room.getAmountPeople();
+		this.userId = room.getUser().getId();
 	}
 
 	public String getId() {
@@ -46,5 +48,13 @@ public class RoomDTO {
 
 	public void setAmountPeople(Integer amountPeople) {
 		this.amountPeople = amountPeople;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	public String getUserId() {
+		return userId;
 	}
 }

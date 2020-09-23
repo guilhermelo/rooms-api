@@ -2,14 +2,20 @@ package melo.guilherme.rooms.api.user;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import melo.guilherme.rooms.api.room.Room;
 
 @Entity
 @Table(name = "users")
@@ -32,11 +38,14 @@ public class User implements UserDetails {
 	@Column
 	private String email;
 	
+	@Transient
+	private List<Room> rooms = new LinkedList<Room>();
+	
 	public User() {
 		super();
 	}
 	
-	private User(UserBuilder builder) {
+	private User(builder builder) {
 		this.id = builder.id;
 		this.username = builder.username;
 		this.password = builder.password;
@@ -45,7 +54,7 @@ public class User implements UserDetails {
 	}
 	
 	
-	public static class UserBuilder {
+	public static class builder {
 		
 		private String id;
 		private String username;
@@ -53,27 +62,27 @@ public class User implements UserDetails {
 		private String email;
 		private String name;
 		
-		public UserBuilder id(String id) {
+		public builder id(String id) {
 			this.id = id;
 			return this;
 		}
 		
-		public UserBuilder username(String username) {
+		public builder username(String username) {
 			this.username = username;
 			return this;
 		}
 		
-		public UserBuilder password(String password) {
+		public builder password(String password) {
 			this.password = password;
 			return this;
 		}
 		
-		public UserBuilder email(String email) {
+		public builder email(String email) {
 			this.email = email;
 			return this;
 		}
 		
-		public UserBuilder name(String name) {
+		public builder name(String name) {
 			this.name = name;
 			return this;
 		}
@@ -160,5 +169,13 @@ public class User implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public List<Room> getRooms() {
+		return Collections.unmodifiableList(rooms);
+	}
+	
+	public void addRoom(Room room) {
+		this.rooms.add(room);
 	}
 }

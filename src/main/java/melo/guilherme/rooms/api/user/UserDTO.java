@@ -1,6 +1,10 @@
 package melo.guilherme.rooms.api.user;
 
+import java.util.List;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import melo.guilherme.rooms.api.room.RoomDTO;
 
 public class UserDTO {
 	private String id;
@@ -8,6 +12,7 @@ public class UserDTO {
 	private String password;
 	private String email;
 	private String name;
+	private List<RoomDTO> rooms;
 	
 	public UserDTO() {
 		super();
@@ -54,6 +59,14 @@ public class UserDTO {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public List<RoomDTO> getRooms() {
+		return rooms;
+	}
+	
+	public void setRooms(List<RoomDTO> rooms) {
+		this.rooms = rooms;
 	}
 
 	public UsernamePasswordAuthenticationToken transformAuthenticationToken() {

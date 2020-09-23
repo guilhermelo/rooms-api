@@ -1,62 +1,45 @@
 package melo.guilherme.rooms.api.room;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Profile;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Profile("test")
-@WebMvcTest(RoomController.class)
-class RoomControllerTest {
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@AutoConfigureMockMvc
+public class RoomControllerTest {
 	
 //	@Autowired
 //	private MockMvc mockMvc;
-//	
+	
 //	@MockBean
 //	private RoomService service;
-//	
+	
 //	@Autowired
 //	private TokenService tokenService;
-//	
+	
 //	@Autowired
 //	private ObjectMapper mapper;
-//	
-//	@Autowired
-//	private AuthenticationManager authenticationManager;
-//	
-//	private UserDTO user;
-//	
-//	
+	
 //	@Before
 //	public void setup() {
-//		user = new UserDTO(new User.UserBuilder().username("teste").password("teste").build());
+//		System.out.println("Setup");
 //	}
 //
 //	@Test
-//	public void shouldListRooms() throws Exception {
+//	public void shouldGetAllRooms() throws Exception {
 //		
-//		Room room = new Room.RoomBuilder().id(IDGenerator.generateID())
-//										  .name("Room 1")
-//										  .description("Room number 1")
-//										  .amountPeople(5)
-//										  .build();
-//		
-//		List<Room> rooms = Arrays.asList(room);
-//		
-//		String accessToken = generateToken(user);
-//		
-//		when(service.getRooms()).thenReturn(rooms);
-//		
-//		mockMvc.perform(get("/v1/rooms").header("Authorization", "Bearer " + accessToken))
-//			   .andExpect(status().isOk())
-//			   .andExpect(content().json(mapper.writeValueAsString(Arrays.asList(room))));
-//	}
-//
-//	
-//	private String generateToken(UserDTO user) {
-//		
-//		UsernamePasswordAuthenticationToken login = user.transformAuthenticationToken();
-//		
-//		Authentication authentication = authenticationManager.authenticate(login);
-//		
-//		return tokenService.generateToken(authentication);
+//		mockMvc.perform(get("/v1/rooms")) //.header("Authorization", "Bearer " + accessToken))
+//			   .andExpect(status().isOk());
+//			   // .andExpect(content().json(mapper.writeValueAsString(Arrays.asList(room))));
 //	}
 }

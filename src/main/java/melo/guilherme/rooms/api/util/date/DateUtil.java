@@ -8,17 +8,13 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
-import melo.guilherme.rooms.api.config.exception.BusinessException;
-import melo.guilherme.rooms.api.config.exception.Message;
-import melo.guilherme.rooms.api.config.exception.MessageType;
-
 @Component
 public class DateUtil {
 
 	public LocalDateTime parseDatetime(String dateTime) {
 		
 		if(Objects.isNull(dateTime)) {
-			BusinessException.of(new Message("Invalid Date", MessageType.VALIDATION));
+			throw new NullPointerException("Datetime should not be null!");
 		}
 		
 		LocalDateTime localDateTime = null;		
@@ -27,7 +23,7 @@ public class DateUtil {
 			
 			localDateTime = LocalDateTime.parse(dateTime, formatter);
 		} catch (DateTimeParseException e) {
-			throw new IllegalArgumentException("Date shouldn't be empty");
+			throw new IllegalArgumentException("Error in parse datetime: " + e.getMessage());
 		}
 		
 		return localDateTime;

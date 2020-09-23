@@ -10,6 +10,7 @@ public class BusinessException extends RuntimeException {
 	private List<Message> messages;
 
 	private BusinessException(Message message) {
+		super(message.getMessage());
 
 		if (messages == null) {
 			messages = new ArrayList<Message>();
@@ -22,12 +23,12 @@ public class BusinessException extends RuntimeException {
 		this.messages = messages;
 	}
 
-	public static void of(List<Message> messages) {
-		throw new BusinessException(messages);
+	public static BusinessException of(List<Message> messages) {
+		return new BusinessException(messages);
 	}
 
-	public static void of(Message message) {
-		throw new BusinessException(message);
+	public static BusinessException of(Message message) {
+		return new BusinessException(message);
 	}
 
 	public List<Message> getMessages() {

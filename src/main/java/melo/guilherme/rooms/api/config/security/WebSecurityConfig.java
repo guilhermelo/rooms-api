@@ -22,7 +22,6 @@ import melo.guilherme.rooms.api.user.UserRepository;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	
 	@Autowired
 	private AuthenticationService service;
 	

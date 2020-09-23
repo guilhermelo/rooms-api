@@ -1,5 +1,7 @@
 package melo.guilherme.rooms.api.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -109,6 +111,19 @@ public class UserController {
 		try {
 			user = userService.getByUsername(username);
 			return ResponseEntity.ok(assembler.assembleDTO(user));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<UserDTO>> getAll() {
+
+		List<User> users;
+
+		try {
+			users = userService.getAll();
+			return ResponseEntity.ok(assembler.assembleManyDTOs(users));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
 		}
