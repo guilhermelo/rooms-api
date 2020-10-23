@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 	
 	@Autowired
-	private ReservationService service;
-
+	private ReservaionService service;
+	
 	@PostMapping
 	public ResponseEntity<?> reserveRoom(@RequestBody ReservationDTO dto) {
 		service.reserveRoom(dto.toModel());
