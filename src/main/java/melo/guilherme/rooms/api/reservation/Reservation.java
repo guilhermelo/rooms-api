@@ -3,6 +3,7 @@ package melo.guilherme.rooms.api.reservation;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ public class Reservation {
 
     @Id
     @Column
-    private String id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
@@ -74,13 +75,13 @@ public class Reservation {
     }
 
     public static class builder {
-        private String id;
+        private UUID id;
         private Room room;
         private User user;
         private LocalDateTime initDate;
         private LocalDateTime finalDate;
 
-        public builder id(String id) {
+        public builder id(UUID id) {
             this.id = id;
             return this;
         }
@@ -111,11 +112,11 @@ public class Reservation {
 
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
