@@ -18,37 +18,31 @@ import melo.guilherme.rooms.api.util.uuid.UUIDGenerator;
 @Service
 public class ReservationService {
 
-	@Autowired
-	private IReservationRepository repository;
+    @Autowired
+    private IReservationRepository repository;
 
-	@Autowired
-	private RoomRepository roomRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = { BusinessException.class, Exception.class })
-	public void reserveRoom(Reservation reserve) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BusinessException.class, Exception.class})
+    public void reserveRoom(Reservation reservation) {
 
-		if (Objects.nonNull(reserve.getRoom())) {
-			if (!roomRepository.existsById(reserve.getRoom().getId())) {
-				BusinessException.of(Message.of("Sala informada não existe!", MessageType.VALIDATION));
-			}
-		}
+        if(reservation.salaNaoExiste(roomRepository)) {
+            throw BusinessException.of(Message.of("Sala informada não existe!", MessageType.VALIDATION));
+        }
 
-		if (Objects.nonNull(reserve.getUser())) {
-			if (!userRepository.existsById(reserve.getUser().getId())) {
-				BusinessException.of(Message.of("Usuário informado não existe!", MessageType.VALIDATION));
-			}
-		}
+        if (reservation.usuarioNaoExiste(userRepository)) {
+            throw BusinessException.of(Message.of("Usuário informado não existe!", MessageType.VALIDATION));
+        }
 
-		if (Objects.nonNull(reserve.getInitDate()) && Objects.nonNull(reserve.getFinalDate())) {
-			if (ChronoUnit.HOURS.between(reserve.getInitDate(), reserve.getFinalDate()) > 12l) {
-				BusinessException.of(Message.of("Não é possível reservar sala por mais de 12 horas!", MessageType.VALIDATION));
-			}
-		}
+        if (reservation.ehMaiorQueDozeHoras()) {
+            throw BusinessException.of(Message.of("Não é possível reservar sala por mais de 12 horas!", MessageType.VALIDATION));
+        }
 
-		reserve.setId(UUIDGenerator.generate());
-		repository.save(reserve);
-	}
+        reservation.setId(UUIDGenerator.generate());
+        repository.save(reservation);
+    }
 }

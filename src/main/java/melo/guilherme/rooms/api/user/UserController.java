@@ -1,6 +1,7 @@
 package melo.guilherme.rooms.api.user;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,26 +36,17 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private UserAssemblerDTO assembler;
-
 	@PostMapping
 	@RequestMapping("/authentication")
 	public ResponseEntity<?> authentication(@RequestBody UserDTO userLogin) {
 
 		UsernamePasswordAuthenticationToken login = userLogin.transformAuthenticationToken();
-
 		try {
 			Authentication authentication = authenticationManager.authenticate(login);
-
-			String token = new StringBuilder(BEARER).append(" ")
-													.append(tokenService.generateToken(authentication))
-													.toString();
-			
+			String token = BEARER + " " + tokenService.generateToken(authentication);
 			User user = (User) authentication.getPrincipal();
 			
-			
-			UserDTO dto = assembler.assembleDTO(user);
+			UserDTO dto = UserDTO.from(user);
 			dto.setPassword(null);
 			
 			return ResponseEntity.ok().header("x-access-token", token).body(dto);
@@ -66,25 +58,17 @@ public class UserController {
 
 	@PostMapping
 	public ResponseEntity<UserDTO> save(@RequestBody UserDTO dto) {
-
-		User user = assembler.assembleEntity(dto);
-
-		User savedUser = userService.save(user);
-
-		return ResponseEntity.ok(assembler.assembleDTO(savedUser));
+		User savedUser = userService.save(dto.toModel());
+		return ResponseEntity.ok(UserDTO.from(savedUser));
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<UserDTO> update(@PathVariable("id") String id, @RequestBody UserDTO dto) {
-
-		User user = assembler.assembleEntity(dto);
-
 		User updatedUser;
 		try {
-			updatedUser = userService.update(id, user);
-			return ResponseEntity.ok(assembler.assembleDTO(updatedUser));
+			updatedUser = userService.update(id, dto.toModel());
+			return ResponseEntity.ok(UserDTO.from(updatedUser));
 		} catch (Exception e) {
-			// TODO
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -95,14 +79,12 @@ public class UserController {
 		User deletedUser;
 		try {
 			deletedUser = userService.delete(id);
-			return ResponseEntity.ok(assembler.assembleDTO(deletedUser));
+			return ResponseEntity.ok(UserDTO.from(deletedUser));
 		} catch (Exception e) {
-			// TODO
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	
+
 	@GetMapping("/exists/{username}")
 	public ResponseEntity<UserDTO> userExists(@PathVariable("username") String username) {
 		
@@ -110,7 +92,7 @@ public class UserController {
 		
 		try {
 			user = userService.getByUsername(username);
-			return ResponseEntity.ok(assembler.assembleDTO(user));
+			return ResponseEntity.ok(UserDTO.from(user));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
 		}
@@ -118,12 +100,9 @@ public class UserController {
 	
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> getAll() {
-
-		List<User> users;
-
 		try {
-			users = userService.getAll();
-			return ResponseEntity.ok(assembler.assembleManyDTOs(users));
+			List<UserDTO> users = userService.getAll().stream().map(UserDTO::from).collect(Collectors.toList());
+			return ResponseEntity.ok(users);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
 		}

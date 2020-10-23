@@ -13,15 +13,10 @@ public class ReservationController {
 	
 	@Autowired
 	private ReservationService service;
-	
-	@Autowired
-	private ReservationAssemblerDTO assembler;
-	
-	
+
 	@PostMapping
 	public ResponseEntity<?> reserveRoom(@RequestBody ReservationDTO dto) {
-		service.reserveRoom(assembler.assembleEntity(dto));
-		
+		service.reserveRoom(dto.toModel());
 		return ResponseEntity.ok().build();
 	}
 }
