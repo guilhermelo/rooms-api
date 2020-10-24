@@ -1,42 +1,45 @@
 package melo.guilherme.rooms.api.room;
 
 import java.util.Objects;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import melo.guilherme.rooms.api.user.User;
 
 @Entity
 @Table(name = "rooms")
 public class Room {
+
 	@Id
-	@NotBlank
-	private String id;
-	
-	@NotBlank
+	@GeneratedValue
+	private UUID id;
+
+	@NotNull
+	@Size(min = 10, message = "Nome deve ter pelo menos 10 caracteres")
 	@Column(name = "name", nullable = false, length = 20, unique = true)
 	private String name;
-	
-	@NotBlank
+
+	@NotNull
+	@Size(min = 20, message = "Descrição deve ter pelo menos 20 caracteres")
+	@Size(max = 100, message = "Descrição deve ter no máximo 100 caracteres")
 	@Column(name = "description", nullable = false, length = 50)
 	private String description;
-	
+
+	@NotNull(message = "Necessário informar a quantidade de pessoas")
 	@Positive
+	@Min(1)
 	@Column(name = "amountPeople", nullable = false)
 	private Integer amountPeople;
 	
-	@NotNull
+	@NotNull(message = "Deve haver um usuário associado à sala")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
-	
+
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public Room() {
 	}
@@ -48,49 +51,35 @@ public class Room {
 		this.amountPeople = builder.amountPeople;
 		this.user = builder.user;
 	}
-	
-	
+
 	public static class builder {
-		private String id;
+		private UUID id;
 		private String name;
 		private String description;
 		private Integer amountPeople;
 		private User user;
 		
-		public builder id(String id) {
+		public builder id(UUID id) {
 			this.id = id;
 			return this;
 		}
 		
 		public builder name(String name) {
-			Objects.requireNonNull(name, "Name is required");
-			
 			this.name = name;
 			return this;
 		}
 		
 		public builder description(String description) {
-			
-			Objects.requireNonNull(description, "Description is required");
-			
-			if(description.length() > 100) {
-				throw new IllegalArgumentException("Description must be less then 100");
-			}
-			
 			this.description = description;
 			return this;
 		}
 		
 		public builder amountPeople(Integer amountPeople) {
-			Objects.requireNonNull(amountPeople, "Amount People is required");
-			
 			this.amountPeople = amountPeople;
 			return this;
 		}
 		
 		public builder user(User user) {
-			Objects.requireNonNull(user, "User can't be null");
-			
 			this.user = user;
 			return this;
 		}
@@ -100,11 +89,11 @@ public class Room {
 		}
 	}
 	
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 

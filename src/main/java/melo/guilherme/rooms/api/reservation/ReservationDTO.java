@@ -1,69 +1,83 @@
 package melo.guilherme.rooms.api.reservation;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import melo.guilherme.rooms.api.room.RoomDTO;
 import melo.guilherme.rooms.api.user.UserDTO;
 
 public class ReservationDTO {
-	private String id;
-	private RoomDTO room;
-	private UserDTO user;
-	private String initDate;
-	private String finalDate;
+    private String id;
+    private RoomDTO room;
+    private UserDTO user;
+    private String initDate;
+    private String finalDate;
 
-	public ReservationDTO() {
-		super();
-	}
+    public ReservationDTO() {
+        super();
+    }
 
-	public ReservationDTO(Reservation reserve) {
+    public Reservation toModel() {
 
-		if (Objects.isNull(reserve)) {
-			return;
-		}
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-		this.id = reserve.getId();
-		this.initDate = reserve.getInitDate().toString();
-		this.finalDate = reserve.getFinalDate().toString();
-	}
+        return new Reservation.builder()
+                              .room(room.toModel())
+                              .user(user.toModel())
+                              .initDate(LocalDateTime.parse(initDate, formatter))
+                              .finalDate(LocalDateTime.parse(finalDate, formatter))
+                              .build();
+    }
 
-	public String getId() {
-		return id;
-	}
+    public ReservationDTO(Reservation reserve) {
 
-	public void setId(String id) {
-		this.id = id;
-	}
+        if (Objects.isNull(reserve)) {
+            return;
+        }
 
-	public RoomDTO getRoom() {
-		return room;
-	}
+        this.id = reserve.getId();
+        this.initDate = reserve.getInitDate().toString();
+        this.finalDate = reserve.getFinalDate().toString();
+    }
 
-	public void setRoom(RoomDTO room) {
-		this.room = room;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public UserDTO getUser() {
-		return user;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setUser(UserDTO user) {
-		this.user = user;
-	}
+    public RoomDTO getRoom() {
+        return room;
+    }
 
-	public String getInitDate() {
-		return initDate;
-	}
+    public void setRoom(RoomDTO room) {
+        this.room = room;
+    }
 
-	public void setInitDate(String initDate) {
-		this.initDate = initDate;
-	}
+    public UserDTO getUser() {
+        return user;
+    }
 
-	public String getFinalDate() {
-		return finalDate;
-	}
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
 
-	public void setFinalDate(String finalDate) {
-		this.finalDate = finalDate;
-	}
+    public String getInitDate() {
+        return initDate;
+    }
+
+    public void setInitDate(String initDate) {
+        this.initDate = initDate;
+    }
+
+    public String getFinalDate() {
+        return finalDate;
+    }
+
+    public void setFinalDate(String finalDate) {
+        this.finalDate = finalDate;
+    }
 }

@@ -1,16 +1,15 @@
 package melo.guilherme.rooms.api.room;
 
+import java.util.UUID;
+
 public class RoomDTO {
-	private String id;
+	private UUID id;
 	private String name;
 	private String description;
 	private Integer amountPeople;
 	private String userId;
-	
-	public RoomDTO() {
-	}
 
-	public RoomDTO(Room room) {
+	private RoomDTO(Room room) {
 		this.id = room.getId();
 		this.name = room.getName();
 		this.description = room.getDescription();
@@ -18,16 +17,28 @@ public class RoomDTO {
 		this.userId = room.getUser().getId();
 	}
 
-	public String getId() {
+	public RoomDTO() {
+	}
+
+	public static RoomDTO from(Room room) {
+		return new RoomDTO(room);
+	}
+
+	public Room toModel() {
+		return new Room.builder()
+				       .id(id)
+				       .name(name)
+				       .description(description)
+				       .amountPeople(amountPeople)
+				       .build();
+	}
+
+	public UUID getId() {
 		return id;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getDescription() {
@@ -38,22 +49,6 @@ public class RoomDTO {
 		return amountPeople;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setAmountPeople(Integer amountPeople) {
-		this.amountPeople = amountPeople;
-	}
-	
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
 	public String getUserId() {
 		return userId;
 	}
