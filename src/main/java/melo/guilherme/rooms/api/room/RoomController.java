@@ -1,8 +1,15 @@
 package melo.guilherme.rooms.api.room;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import melo.guilherme.rooms.api.generic.CollectionResponseDTO;
@@ -26,6 +35,8 @@ public class RoomController {
 
 	private final RoomService service;
 	private final RoomAssemblerDTO assembler;
+	
+	private final Path directoryFiles = Paths.get("files");
 	
 	public RoomController(RoomService service, RoomAssemblerDTO assembler) {
 		this.service = service;
@@ -74,5 +85,28 @@ public class RoomController {
 		Room deletedRoom = service.delete(id);
 		
 		return ResponseEntity.ok(assembler.assembleDTO(deletedRoom));
+	}
+	
+	@PostMapping("/upload")
+	public ResponseEntity<RoomDTO> upload(@RequestParam("files") MultipartFile[] files) {
+		
+		for (MultipartFile file : files) {
+			try {
+				Files.copy(file.getInputStream(), this.directoryFiles.resolve(file.getOriginalFilename()));
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostConstruct
+	public void criaDiretorio() {
+		try {
+			Files.createDirectory(directoryFiles);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
