@@ -3,6 +3,7 @@ package melo.guilherme.rooms.api.user;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Example;
@@ -16,7 +17,6 @@ import melo.guilherme.rooms.api.config.exception.MessageType;
 import melo.guilherme.rooms.api.room.Room;
 import melo.guilherme.rooms.api.room.RoomRepository;
 import melo.guilherme.rooms.api.util.crypt.CryptUtil;
-import melo.guilherme.rooms.api.util.uuid.UUIDGenerator;
 
 @Service
 public class UserService {
@@ -60,7 +60,7 @@ public class UserService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = { BusinessException.class, Exception.class })
 	public User save(User user) {
 		user.setPassword(CryptUtil.encryptPassword(user.getPassword()));
-		user.setId(UUIDGenerator.generate());
+		user.setId(UUID.randomUUID());
 		repository.save(user);
 
 		return user;
@@ -73,11 +73,8 @@ public class UserService {
 			throw BusinessException.of(Message.of("Identificador nulo", MessageType.VALIDATION));
 		}
 
-		user.setId(id);
-
-		User updatedUser = repository.save(user);
-
-		return updatedUser;
+		user.setId(UUID.fromString(id));
+		return repository.save(user);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = { BusinessException.class, Exception.class })
@@ -87,9 +84,9 @@ public class UserService {
 			throw BusinessException.of(Message.of("Identificador nulo", MessageType.VALIDATION));
 		}
 
-		repository.deleteById(id);
-
-		return new User.builder().id(id).build();
+		UUID uuid = UUID.fromString(id);
+		repository.deleteById(uuid);
+		return new User.builder().id(uuid).build();
 	}
 
 }

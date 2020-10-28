@@ -1,16 +1,8 @@
 package melo.guilherme.rooms.api.user;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +16,8 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = -9200343249921022356L;
 
 	@Id
-	private String id;
+	@GeneratedValue
+	private UUID id;
 	
 	@Column
 	private String name;
@@ -56,13 +49,13 @@ public class User implements UserDetails {
 	
 	public static class builder {
 		
-		private String id;
+		private UUID id;
 		private String username;
 		private String password;
 		private String email;
 		private String name;
 		
-		public builder id(String id) {
+		public builder id(UUID id) {
 			this.id = id;
 			return this;
 		}
@@ -92,7 +85,7 @@ public class User implements UserDetails {
 		}
 	}
 	
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 	
@@ -163,7 +156,7 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

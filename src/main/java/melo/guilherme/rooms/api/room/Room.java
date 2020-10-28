@@ -18,6 +18,7 @@ public class Room {
 
 	@NotNull
 	@Size(min = 10, message = "Nome deve ter pelo menos 10 caracteres")
+	@Size(max = 20, message = "Nome deve ter no máximo 20 caracteres")
 	@Column(name = "name", nullable = false, length = 20, unique = true)
 	private String name;
 

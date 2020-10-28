@@ -1,6 +1,7 @@
 package melo.guilherme.rooms.api.config.security;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,8 +17,8 @@ import melo.guilherme.rooms.api.user.UserRepository;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	
-	private TokenService tokenService;
-	private UserRepository userRepository;
+	private final TokenService tokenService;
+	private final UserRepository userRepository;
 	
 	public JWTAuthenticationFilter(TokenService tokenService, UserRepository userRepository) {
 		this.tokenService = tokenService;
@@ -40,7 +41,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	
 	private void authenticateClient(String token) {
 		String userId = tokenService.getUserId(token);
-		User user = userRepository.findById(userId).get();
+		User user = userRepository.findById(UUID.fromString(userId)).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 		
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		

@@ -26,9 +26,7 @@ import melo.guilherme.rooms.api.config.security.TokenService;
 public class UserController {
 
 	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	private String BEARER = "Bearer";
+	private AuthenticationManager authenticationManager;;
 
 	@Autowired
 	private TokenService tokenService;
@@ -43,7 +41,7 @@ public class UserController {
 		UsernamePasswordAuthenticationToken login = userLogin.transformAuthenticationToken();
 		try {
 			Authentication authentication = authenticationManager.authenticate(login);
-			String token = BEARER + " " + tokenService.generateToken(authentication);
+			String token = "Bearer " + tokenService.generateToken(authentication);
 			User user = (User) authentication.getPrincipal();
 			
 			UserDTO dto = UserDTO.from(user);

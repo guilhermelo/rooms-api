@@ -1,5 +1,7 @@
 package melo.guilherme.rooms.api.room;
 
+import melo.guilherme.rooms.api.user.User;
+
 import java.util.UUID;
 
 public class RoomDTO {
@@ -7,7 +9,7 @@ public class RoomDTO {
 	private String name;
 	private String description;
 	private Integer amountPeople;
-	private String userId;
+	private UUID userId;
 
 	private RoomDTO(Room room) {
 		this.id = room.getId();
@@ -30,6 +32,7 @@ public class RoomDTO {
 				       .name(name)
 				       .description(description)
 				       .amountPeople(amountPeople)
+				       .user(new User.builder().id(userId).build())
 				       .build();
 	}
 
@@ -49,7 +52,7 @@ public class RoomDTO {
 		return amountPeople;
 	}
 
-	public String getUserId() {
+	public UUID getUserId() {
 		return userId;
 	}
 }

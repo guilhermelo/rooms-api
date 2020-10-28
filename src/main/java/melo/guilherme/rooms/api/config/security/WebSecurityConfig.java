@@ -65,8 +65,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private CorsConfigurationSource corsConfig() {
 		CorsConfiguration config = new CorsConfiguration();
-		
-		// "x-access-token"
 		config.addExposedHeader("x-access-token");
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

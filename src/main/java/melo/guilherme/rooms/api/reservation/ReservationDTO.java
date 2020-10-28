@@ -3,12 +3,13 @@ package melo.guilherme.rooms.api.reservation;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.UUID;
 
 import melo.guilherme.rooms.api.room.RoomDTO;
 import melo.guilherme.rooms.api.user.UserDTO;
 
 public class ReservationDTO {
-    private String id;
+    private UUID id;
     private RoomDTO room;
     private UserDTO user;
     private String initDate;
@@ -41,11 +42,11 @@ public class ReservationDTO {
         this.finalDate = reserve.getFinalDate().toString();
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

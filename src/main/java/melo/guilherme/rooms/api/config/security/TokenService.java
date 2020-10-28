@@ -31,7 +31,7 @@ public class TokenService {
 				   .claim("username", loggedUser.getUsername())
 				   .claim("name", loggedUser.getName())
 				   .claim("id", loggedUser.getId())
-				   .setSubject(loggedUser.getId())
+				   .setSubject(loggedUser.getId().toString())
 				   .setExpiration(Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 				   .signWith(SignatureAlgorithm.HS256, secret)
 				   .compact();

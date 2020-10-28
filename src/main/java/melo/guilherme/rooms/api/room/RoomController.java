@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -29,21 +30,21 @@ public class RoomController {
     private final RoomRepository repository;
     private final UserRepository userRepository;
 
-    private final Path directoryFiles = Paths.get("files");
+    // private final Path directoryFiles = Paths.get("files");
 
     public RoomController(RoomRepository repository, UserRepository userRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void criaDiretorio() {
         try {
             Files.createDirectory(directoryFiles);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<CollectionResponseDTO<RoomDTO>> getAll() {
@@ -63,11 +64,11 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<RoomDTO> save(@RequestBody RoomDTO dto, UriComponentsBuilder uriBuilder) {
-        Room room = dto.toModel();
+    public ResponseEntity<RoomDTO> save(@RequestBody @Valid RoomRequest request, UriComponentsBuilder uriBuilder) {
+        Room room = request.toModel();
 
         userRepository.findById(room.getUser().getId())
-                .orElseThrow(() -> BusinessException.of(Message.of("Room's user doesn't exist!", MessageType.VALIDATION)));
+                      .orElseThrow(() -> BusinessException.of(Message.of("Room's user doesn't exist!", MessageType.VALIDATION)));
 
         Room savedRoom = repository.save(room);
 
@@ -95,7 +96,7 @@ public class RoomController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/upload")
+    /*@PostMapping("/upload")
     public ResponseEntity<RoomDTO> upload(@RequestParam("files") MultipartFile[] files) {
 
         for (MultipartFile file : files) {
@@ -107,5 +108,5 @@ public class RoomController {
         }
 
         return null;
-    }
+    }*/
 }
