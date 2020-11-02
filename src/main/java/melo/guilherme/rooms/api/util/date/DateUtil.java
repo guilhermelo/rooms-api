@@ -3,6 +3,7 @@ package melo.guilherme.rooms.api.util.date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -12,21 +13,15 @@ import org.springframework.stereotype.Component;
 public class DateUtil {
 
 	public LocalDateTime parseDatetime(String dateTime) {
-		
-		if(Objects.isNull(dateTime)) {
-			throw new NullPointerException("Datetime should not be null!");
-		}
-		
-		LocalDateTime localDateTime = null;		
+
+		Objects.requireNonNull(dateTime, "Data não deve ser nula");
+
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 			
-			localDateTime = LocalDateTime.parse(dateTime, formatter);
+			return LocalDateTime.parse(dateTime, formatter);
 		} catch (DateTimeParseException e) {
-			throw new IllegalArgumentException("Error in parse datetime: " + e.getMessage());
+			throw new IllegalArgumentException("Erro ao tentar converter data. Valor informado: " + dateTime);
 		}
-		
-		return localDateTime;
 	}
-
 }

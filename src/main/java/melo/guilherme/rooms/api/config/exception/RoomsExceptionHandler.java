@@ -14,9 +14,12 @@ import java.util.List;
 public class RoomsExceptionHandler {
 	
 	@ExceptionHandler(BusinessException.class)
-	public ResponseEntity<ResponseError> businessException(BusinessException e) {;
-
+	public ResponseEntity<ResponseError> businessException(BusinessException e) {
 		ResponseError response = new ResponseError();
+
+		for (Message m : e.getMessages()) {
+			response.addMessage(m.getMessage());
+		}
 
 		return ResponseEntity.badRequest().body(response);
 	}
@@ -26,13 +29,13 @@ public class RoomsExceptionHandler {
 
 		BindingResult result = e.getBindingResult();
 		List<ObjectError> errors = result.getAllErrors();
-		ResponseError responseError = new ResponseError();
+		ResponseError response = new ResponseError();
 
 		for (ObjectError error : errors) {
-			responseError.addMessage(error.getDefaultMessage());
+			response.addMessage(error.getDefaultMessage());
 		}
 
-		return ResponseEntity.badRequest().body(responseError);
+		return ResponseEntity.badRequest().body(response);
 	}
 
 }

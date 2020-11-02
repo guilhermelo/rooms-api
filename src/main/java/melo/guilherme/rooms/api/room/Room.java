@@ -1,12 +1,13 @@
 package melo.guilherme.rooms.api.room;
 
-import java.util.Objects;
-import java.util.UUID;
+import melo.guilherme.rooms.api.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import melo.guilherme.rooms.api.user.User;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Entity
 @Table(name = "rooms")
@@ -112,9 +113,5 @@ public class Room {
 	
 	public User getUser() {
 		return user;
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
 	}
 }

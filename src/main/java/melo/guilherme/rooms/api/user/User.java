@@ -32,7 +32,7 @@ public class User implements UserDetails {
 	private String email;
 	
 	@Transient
-	private List<Room> rooms = new LinkedList<Room>();
+	private final List<Room> rooms = new LinkedList<>();
 	
 	public User() {
 		super();
@@ -138,22 +138,18 @@ public class User implements UserDetails {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(id, user.id) &&
+				Objects.equals(name, user.name) &&
+				Objects.equals(username, user.username) &&
+				Objects.equals(password, user.password) &&
+				Objects.equals(email, user.email) &&
+				Objects.equals(rooms, user.rooms);
 	}
 
 	public void setId(UUID id) {

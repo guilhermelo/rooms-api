@@ -33,17 +33,13 @@ public class UserService {
 
 		List<Room> rooms = roomRepository.findAll();
 
-		List<User> users = rooms.stream().collect(Collectors.groupingBy(Room::getUser)).entrySet().stream()
+		return  rooms.stream().collect(Collectors.groupingBy(Room::getUser)).entrySet().stream()
 				.map(element -> {
 					final User user = element.getKey();
 					final List<Room> userRooms = element.getValue();
-
 					userRooms.forEach(user::addRoom);
-
 					return user;
 				}).collect(Collectors.toList());
-
-		return users;
 	}
 
 	public User getByUsername(String username) {

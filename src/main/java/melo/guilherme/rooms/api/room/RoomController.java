@@ -7,18 +7,11 @@ import melo.guilherme.rooms.api.generic.CollectionResponseDTO;
 import melo.guilherme.rooms.api.user.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -58,7 +51,7 @@ public class RoomController {
     @GetMapping("/{id}")
     public ResponseEntity<RoomDTO> getById(@PathVariable("id") String id) {
         Room room = repository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("Sala não encontrada!"));
+                              .orElseThrow(() -> BusinessException.of(Message.of("Sala não encontrada!", MessageType.VALIDATION)));
 
         return ResponseEntity.ok(RoomDTO.from(room));
     }
@@ -68,7 +61,7 @@ public class RoomController {
         Room room = request.toModel();
 
         userRepository.findById(room.getUser().getId())
-                      .orElseThrow(() -> BusinessException.of(Message.of("Room's user doesn't exist!", MessageType.VALIDATION)));
+                      .orElseThrow(() -> BusinessException.of(Message.of("Usuário associado à sala não existe!", MessageType.VALIDATION)));
 
         Room savedRoom = repository.save(room);
 
@@ -83,8 +76,7 @@ public class RoomController {
         Room room = dto.toModel();
 
         repository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RuntimeException("Sala não encontrada!"));
-
+                  .orElseThrow(() -> BusinessException.of(Message.of("Sala não encontrada!", MessageType.VALIDATION)));
         room.setId(UUID.fromString(id));
         Room updatedRoom = repository.save(room);
         return ResponseEntity.ok(RoomDTO.from(updatedRoom));
