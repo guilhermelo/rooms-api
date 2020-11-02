@@ -20,7 +20,7 @@ public class AuthenticationService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) {
 		
 		Optional<User> user = repository.findByUsername(username);
 		

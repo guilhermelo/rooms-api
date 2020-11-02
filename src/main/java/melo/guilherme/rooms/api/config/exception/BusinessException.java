@@ -1,6 +1,7 @@
 package melo.guilherme.rooms.api.config.exception;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BusinessException extends RuntimeException {
@@ -13,7 +14,7 @@ public class BusinessException extends RuntimeException {
 		super(message.getMessage());
 
 		if (messages == null) {
-			messages = new ArrayList<Message>();
+			messages = new ArrayList<>();
 		}
 		
 		messages.add(message);
@@ -32,7 +33,7 @@ public class BusinessException extends RuntimeException {
 	}
 
 	public List<Message> getMessages() {
-		return messages;
+		return Collections.unmodifiableList(messages);
 	}
 
 }

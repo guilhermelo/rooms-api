@@ -26,7 +26,7 @@ import melo.guilherme.rooms.api.config.security.TokenService;
 public class UserController {
 
 	@Autowired
-	private AuthenticationManager authenticationManager;;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private TokenService tokenService;

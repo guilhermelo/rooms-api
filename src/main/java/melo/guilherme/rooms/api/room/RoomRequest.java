@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class RoomRequest {
-    private UUID id;
 
     @NotNull
     @Size(min = 10, message = "Nome deve ter pelo menos 10 caracteres")
@@ -32,18 +31,20 @@ public class RoomRequest {
     public RoomRequest() {
     }
 
+    public RoomRequest(String name, String description, Integer amountPeople, UUID userId) {
+        this.name = name;
+        this.description = description;
+        this.amountPeople = amountPeople;
+        this.userId = userId;
+    }
+
     public Room toModel() {
         return new Room.builder()
-                .id(id)
                 .name(name)
                 .description(description)
                 .amountPeople(amountPeople)
                 .user(new User.builder().id(userId).build())
                 .build();
-    }
-
-    public UUID getId() {
-        return id;
     }
 
     public String getName() {
